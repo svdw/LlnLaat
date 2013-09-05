@@ -11,10 +11,10 @@
         
         <script type="text/javascript" src="phonegap.js"></script>
         <script type="text/javascript" src="barcodescanner.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
 			 function init(){
-					console.log("GOT AN ONLOAD!!!")
 					document.addEventListener("deviceready", deviceReady, true);
 				}
 		
@@ -23,10 +23,24 @@
 			
 			scanner.scan(
 			  function (result) {
+				//Send to webservice
+				var currentTime = new Date();
+				var month = currentTime.getMonth() + 1;
+				var day = currentTime.getDate();
+				var year = currentTime.getFullYear();
+				
+				var data = {
+					wisaId: JSON.stringify(result.text),
+					datetime: JSON.stringify(day + "/" + month + "/" + year)
+				};
+				
+				alert(data);
+			  
+			  /*
 				  alert("We got a barcode\n" +
 						"Result: " + result.text + "\n" +
 						"Format: " + result.format + "\n" +
-						"Cancelled: " + result.cancelled);
+						"Cancelled: " + result.cancelled);*/
 			  }, 
 			  function (error) {
 				  alert("Scanning failed: " + error);
