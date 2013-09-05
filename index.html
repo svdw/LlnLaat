@@ -7,25 +7,32 @@
         <link rel="stylesheet" type="text/css" href="css/index.css" />
         <title>Laatkomers</title>
     </head>
-    <body>
-        <div class="app">
-            <h1>Laatkomers</h1>
-			<!--
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecteren met het apparaat</p>
-                <p class="event received">Scanner klaar</p>
-            </div>-->
-            <p><a href="#" id="scan" onclick="ScanNow();">scan leerlingkaart</a></p>
-			
-			<p></p>
-            <p id="info"></p>
-        </div>
+    <body onload="init();">
+        
         <script type="text/javascript" src="phonegap.js"></script>
         <script type="text/javascript" src="barcodescanner.js"></script>
-		<script type="text/javascript" src="lib/handlebars.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript">
-            app.initialize();
+			 function init(){
+					console.log("GOT AN ONLOAD!!!")
+					document.addEventListener("deviceready", deviceReady, true);
+				}
+		
+		 function deviceReady() {
+            var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+			
+			scanner.scan(
+			  function (result) {
+				  alert("We got a barcode\n" +
+						"Result: " + result.text + "\n" +
+						"Format: " + result.format + "\n" +
+						"Cancelled: " + result.cancelled);
+			  }, 
+			  function (error) {
+				  alert("Scanning failed: " + error);
+			  }
+		   );
+		   }
         </script>
     </body>
 </html>
