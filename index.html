@@ -34,7 +34,21 @@
 					datetime: JSON.stringify(day + "/" + month + "/" + year)
 				};
 				
-				alert(data);
+				$.ajax({
+					url: "http://llnmobile.vtir.be/services/LaatkomerService.asmx/AddTeLaatKomer",
+					data: data,
+					dataType: "jsonp",
+					success: function (json) {
+						alert("Leerling ingelezen: " + result.text);
+						
+						//init();
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+						alert(xhr.responseText);
+					}
+				});
+				
+				//alert(data);
 			  
 			  /*
 				  alert("We got a barcode\n" +
