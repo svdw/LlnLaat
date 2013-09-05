@@ -1,36 +1,52 @@
-/*
-* Licensed to the Apache Software Foundation (ASF) under one
-* or more contributor license agreements. See the NOTICE file
-* distributed with this work for additional information
-* regarding copyright ownership. The ASF licenses this file
-* to you under the Apache License, Version 2.0 (the
-* "License"); you may not use this file except in compliance
-* with the License. You may obtain a copy of the License at
-*
-* http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing,
-* software distributed under the License is distributed on an
-* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-* KIND, either express or implied. See the License for the
-* specific language governing permissions and limitations
-* under the License.
-*/
-
-
-
- var scanner = cordova.require("cordova/plugin/BarcodeScanner");
-
- function ScanNow() {
-   scanner.scan(
-      function (result) {
-          alert("We got a barcode\n" +
-                "Result: " + result.text + "\n" +
-                "Format: " + result.format + "\n" +
-                "Cancelled: " + result.cancelled);
-      }, 
-      function (error) {
-          alert("Scanning failed: " + error);
-      }
-   );
+function init(){
+	document.addEventListener("deviceready", deviceReady, true);
+}
+		
+ function deviceReady() {
+	var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+	
+	scanner.scan(
+	  function (result) {
+		//Send to webservice
+		var currentTime = new Date();
+		var month = currentTime.getMonth() + 1;
+		var day = currentTime.getDate();
+		var year = currentTime.getFullYear();
+		var hours = currentTime.getHours()
+		var minutes = currentTime.getMinutes()
+		if (minutes < 10){
+			minutes = "0" + minutes
+		}
+		
+		var data = {
+			wisaId: JSON.stringify(result.text),
+			datetime: JSON.stringify(day + "/" + month + "/" + year + " " + hours + ":" + minutes + ":00")
+		};
+		
+		$.ajax({
+			url: "http://llnmobile.vtir.be/services/LaatkomerService.asmx/AddTeLaatKomer",
+			data: data,
+			dataType: "jsonp",
+			success: function (json) {
+				alert("Leerling ingelezen: " + result.text);
+				
+				init();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				alert(xhr.responseText);
+			}
+		});
+		
+		//alert(data);
+	  
+	  /*
+		  alert("We got a barcode\n" +
+				"Result: " + result.text + "\n" +
+				"Format: " + result.format + "\n" +
+				"Cancelled: " + result.cancelled);*/
+	  }, 
+	  function (error) {
+		  alert("Scanning failed: " + error);
+	  }
+	);
 }

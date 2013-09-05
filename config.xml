@@ -1,5 +1,5 @@
 <?xml version="2.0" encoding="UTF-8"?>
-<widget xmlns = "http://www.w3.org/ns/widgets" xmlns:gap = "http://phonegap.com/ns/1.0" id = "com.phonegap.artikelenbeheersysteem" version = "1.0.0">
+<widget xmlns = "http://www.w3.org/ns/widgets" xmlns:gap = "http://phonegap.com/ns/1.0" id = "be.vtiroeselare.laatkomers" version = "1.0.0">
  
     <name>Laatkomers</name>
  
