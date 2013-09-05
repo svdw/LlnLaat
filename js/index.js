@@ -16,75 +16,19 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-var app = {
-    // Application Constructor
-    initialize: function() {
-        this.bindEvents();
-		
-		/*test notifications */
-		//var self = this;
-		//self.showAlert('Test notification', 'Info');
-		//$('.search-key').on('keyup', $.proxy(this.findByName, this));
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // `load`, `deviceready`, `offline`, and `online`.
-    bindEvents: function() {
-        document.addEventListener('deviceready', this.onDeviceReady, false);
-        document.getElementById('scan').addEventListener('click', this.scan, false);
-    },
-    // deviceready Event Handler
-    //
-    // The scope of `this` is the event. In order to call the `receivedEvent`
-    // function, we must explicity call `app.receivedEvent(...);`
-    onDeviceReady: function() {
-        app.receivedEvent('deviceready');
-    },
-    // Update DOM on a Received Event
-    receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
 
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
 
-        console.log('Received Event: ' + id);
-    },
-    scan: function() {
-        console.log('scanning');
-        try {
-            window.plugins.barcodeScanner.scan(function(args) {
-                /*
-				console.log("Scanner result: \n" +
-                    "text: " + args.text + "\n" +
-                    "format: " + args.format + "\n" +
-                    "cancelled: " + args.cancelled + "\n");
-				*/
-                /*
-				if (args.format == "QR_CODE") {
-				window.plugins.childBrowser.showWebPage(args.text, { showLocationBar: false });
-				}
-				*/
-				
-				
-				
-				
-				
-                document.getElementById("info").innerHTML = "Barcode gelezen: " + args.text;
-                //console.log(args);
-        });
-        } catch (ex) {
-            console.log(ex.message);
-        }
-    },
-	showAlert: function (message, title) {
-		if (navigator.notification) {
-			navigator.notification.alert(message, null, title, 'OK');
-		} else {
-			alert(title ? (title + ": " + message) : message);
-		}
-	}
 
-};
+ var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+
+   scanner.scan(
+      function (result) {
+          alert("We got a barcode\n" +
+                "Result: " + result.text + "\n" +
+                "Format: " + result.format + "\n" +
+                "Cancelled: " + result.cancelled);
+      }, 
+      function (error) {
+          alert("Scanning failed: " + error);
+      }
+   );
